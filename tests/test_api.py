@@ -1,0 +1,52 @@
+from fastapi.testclient import TestClient
+from api.main import app
+
+client = TestClient(app)
+
+
+def test_home():
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "healthy"
+
+
+def test_prediction():
+    sample = {
+        "having_IP_Address": -1,
+        "URL_Length": 1,
+        "Shortining_Service": 1,
+        "having_At_Symbol": 1,
+        "double_slash_redirecting": 1,
+        "Prefix_Suffix": -1,
+        "having_Sub_Domain": 0,
+        "SSLfinal_State": 0,
+        "Domain_registeration_length": 1,
+        "Favicon": 1,
+        "port": 1,
+        "HTTPS_token": 1,
+        "Request_URL": -1,
+        "URL_of_Anchor": -1,
+        "Links_in_tags": 0,
+        "SFH": -1,
+        "Submitting_to_email": 1,
+        "Abnormal_URL": 1,
+        "Redirect": 0,
+        "on_mouseover": 1,
+        "RightClick": 1,
+        "popUpWidnow": 1,
+        "Iframe": 1,
+        "age_of_domain": 1,
+        "DNSRecord": 1,
+        "web_traffic": -1,
+        "Page_Rank": -1,
+        "Google_Index": 1,
+        "Links_pointing_to_page": 0,
+        "Statistical_report": 1
+    }
+
+    response = client.post("/predict", json=sample)
+
+    assert response.status_code == 200
+    assert "prediction" in response.json()
+    assert "result" in response.json()
